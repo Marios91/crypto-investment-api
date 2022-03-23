@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,7 +38,7 @@ public class CsvFileRecordsReaderServiceImpl implements CsvFileRecordsReaderServ
                         .filter(line -> !line.isEmpty())
                         .map(line -> line.split(","))
                         .map(splitLine -> new Cryptocurrency(
-                                splitLine[0], splitLine[1], Double.parseDouble(splitLine[2]))
+                                LocalDateTime.ofInstant(Instant.ofEpochMilli(Long.parseLong(splitLine[0])), ZoneId.systemDefault()), splitLine[1], Double.parseDouble(splitLine[2]))
                         )
                         .collect(Collectors.toList()));
 
