@@ -2,6 +2,7 @@ package com.xm.cryptoinvestmentapi.service;
 
 import com.xm.cryptoinvestmentapi.domain.Cryptocurrency;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface CryptoCalculatorService {
@@ -23,5 +24,7 @@ public interface CryptoCalculatorService {
     Cryptocurrency findMinRequested(List<Cryptocurrency> cryptocurrencies, String cryptocurrencySymbol);
 
     Cryptocurrency findMaxRequested(List<Cryptocurrency> cryptocurrencies, String cryptocurrencySymbol);
+
+    Cryptocurrency findMaxNormalizedRangeDayRequested(List<Cryptocurrency> cryptocurrencies, LocalDate startDate);
 
 }

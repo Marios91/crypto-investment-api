@@ -3,11 +3,14 @@ package com.xm.cryptoinvestmentapi.controller;
 import com.xm.cryptoinvestmentapi.domain.Cryptocurrency;
 import com.xm.cryptoinvestmentapi.service.CryptoCalculatorService;
 import com.xm.cryptoinvestmentapi.service.CsvFileRecordsReaderService;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -80,6 +83,12 @@ public class RecommendationController {
     private Cryptocurrency getRequestedMaxCrypto(@RequestParam(value = "symbol") final String cryptocurrencySymbol) {
         List<Cryptocurrency> cryptocurrencies = csvFileRecordsReaderService.getRecords();
         return cryptoCalculatorService.findMaxRequested(cryptocurrencies, cryptocurrencySymbol);
+    }
+
+    @GetMapping("/max-normalized-range-of-day-requested")
+    private Cryptocurrency getRequestedDayMaxNormalizedRangeCrypto(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) final LocalDate startDate) {
+        List<Cryptocurrency> cryptocurrencies = csvFileRecordsReaderService.getRecords();
+        return cryptoCalculatorService.findMaxNormalizedRangeDayRequested(cryptocurrencies, startDate);
     }
 
 }

@@ -6,10 +6,8 @@ import com.xm.cryptoinvestmentapi.service.CryptoCalculatorService;
 import com.xm.cryptoinvestmentapi.service.CsvFileRecordsReaderService;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.time.LocalDate;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -42,6 +40,7 @@ public class CryptoCalculatorServiceImpl implements CryptoCalculatorService {
                 .orElseThrow(() -> new NoSuchElementException("no crypto found!"));
     }
 
+    @Override
     public Cryptocurrency findMaxPrice(List<Cryptocurrency> cryptocurrencies) {
 
         return cryptocurrencies.stream()
@@ -49,11 +48,12 @@ public class CryptoCalculatorServiceImpl implements CryptoCalculatorService {
                 .orElseThrow(() -> new NoSuchElementException("no crypto found!"));
     }
 
+    @Override
     public List<Cryptocurrency> cryptocurrenciesNormalizedRange(List<Cryptocurrency> cryptocurrencies) {
 
         List<Cryptocurrency> cryptocurrenciesNormalizedRange = Arrays.stream(Arrays.stream(CryptocurrencyType.class.getEnumConstants())
                 .map(Enum::name).toArray(String[]::new))
-                .map(cryptocurrencyName -> getCryptocurrencyNormalizedRange(cryptocurrencyName, cryptocurrencies))
+                .map(cryptocurrencyName -> getCryptocurrencyNormalizedRangeByCryptoName(cryptocurrencyName, cryptocurrencies))
                 .sorted(Comparator.comparingDouble(Cryptocurrency::getPrice).reversed())
                 .collect(Collectors.toList());
 
@@ -93,23 +93,44 @@ public class CryptoCalculatorServiceImpl implements CryptoCalculatorService {
                 .orElseThrow(() -> new NoSuchElementException("requested crypto not found!"));
     }
 
-    private Cryptocurrency getCryptocurrencyNormalizedRange(String cryptocurrencyName, List<Cryptocurrency> cryptocurrencies) {
+    @Override
+    public Cryptocurrency findMaxNormalizedRangeDayRequested(List<Cryptocurrency> cryptocurrencies, LocalDate startDate) {
 
-        Cryptocurrency cryptocurrencyMinPrice = cryptocurrencies.stream()
-                .filter(cryptocurrency -> cryptocurrencyName.equals(cryptocurrency.getSymbol()))
-                .min(Comparator.comparingDouble(Cryptocurrency::getPrice))
-                .orElseThrow(() -> new NoSuchElementException("no crypto found!"));
+        Map<String, List<Cryptocurrency>> cryptocurrencyListMap = cryptocurrencies.stream()
+        .collect(Collectors.groupingBy(Cryptocurrency::getSymbol));
 
-        Cryptocurrency cryptocurrencyMaxPrice = cryptocurrencies.stream()
-                .filter(cryptocurrency -> cryptocurrencyName.equals(cryptocurrency.getSymbol()))
-                .max(Comparator.comparingDouble(Cryptocurrency::getPrice))
-                .orElseThrow(() -> new NoSuchElementException("no crypto found!"));
+        Map<String, List<Cryptocurrency>> cryptocurrencyListFilteredByDateMap = cryptocurrencyListMap.entrySet().stream()
+                .collect(Collectors.toMap(entry -> entry.getKey(), entry -> entry.getValue().stream()
+                        .filter(cryptocurrency -> startDate.isEqual(cryptocurrency.getLocalDateTime().toLocalDate()))
+                        .collect(Collectors.toList())));
 
-        double normalizedRange = (cryptocurrencyMaxPrice.getPrice() - cryptocurrencyMinPrice.getPrice() ) / cryptocurrencyMinPrice.getPrice();
+        Map<String, Cryptocurrency> cryptocurrencySymbolNormalizedRangeMap = cryptocurrencyListFilteredByDateMap.entrySet().stream()
+                        .collect(Collectors.toMap(entry -> entry.getKey(), entry -> getCryptocurrencyNormalizedRange(entry.getValue(), entry.getKey())));
 
-        return new Cryptocurrency(cryptocurrencyName, normalizedRange);
-
+        return cryptocurrencySymbolNormalizedRangeMap.values().stream()
+                .max(Comparator.comparingDouble(Cryptocurrency::getNormalizedRange))
+                        .orElseThrow(() -> new NoSuchElementException("no crypto found!"));
     }
 
+    private Cryptocurrency getCryptocurrencyNormalizedRangeByCryptoName(String cryptocurrencyName, List<Cryptocurrency> cryptocurrencies) {
+        List<Cryptocurrency> cryptocurrenciesBySymbol = cryptocurrencies.stream()
+                .filter(cryptocurrency -> cryptocurrencyName.equals(cryptocurrency.getSymbol()))
+                .collect(Collectors.toList());
+
+        return getCryptocurrencyNormalizedRange(cryptocurrenciesBySymbol, cryptocurrencyName);
+    }
+
+    private Cryptocurrency getCryptocurrencyNormalizedRange(List<Cryptocurrency> cryptocurrencies, String symbol) {
+        Cryptocurrency cryptocurrencyMinPrice = findMinPrice(cryptocurrencies);
+        Cryptocurrency cryptocurrencyMaxPrice = findMaxPrice(cryptocurrencies);
+
+        double normalizedRange = getNormalizedRange(cryptocurrencyMaxPrice, cryptocurrencyMinPrice);
+
+        return new Cryptocurrency(symbol, normalizedRange);
+    }
+
+    private double getNormalizedRange(Cryptocurrency cryptocurrencyMaxPrice, Cryptocurrency cryptocurrencyMinPrice) {
+        return (cryptocurrencyMaxPrice.getPrice() - cryptocurrencyMinPrice.getPrice()) / cryptocurrencyMinPrice.getPrice();
+    }
 }
 
