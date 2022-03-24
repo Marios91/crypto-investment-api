@@ -61,6 +61,38 @@ public class CryptoCalculatorServiceImpl implements CryptoCalculatorService {
 
     }
 
+    @Override
+    public Cryptocurrency findOldestRequested(List<Cryptocurrency> cryptocurrencies, String cryptocurrencySymbol) {
+        return cryptocurrencies.stream()
+                .filter(cryptocurrency -> cryptocurrencySymbol.equals(cryptocurrency.getSymbol()))
+                .min(Comparator.comparing(Cryptocurrency::getLocalDateTime))
+                .orElseThrow(() -> new NoSuchElementException("requested crypto not found!"));
+    }
+
+    @Override
+    public Cryptocurrency findNewestRequested(List<Cryptocurrency> cryptocurrencies, String cryptocurrencySymbol) {
+        return cryptocurrencies.stream()
+                .filter(cryptocurrency -> cryptocurrencySymbol.equals(cryptocurrency.getSymbol()))
+                .max(Comparator.comparing(Cryptocurrency::getLocalDateTime))
+                .orElseThrow(() -> new NoSuchElementException("requested crypto not found!"));
+    }
+
+    @Override
+    public Cryptocurrency findMinRequested(List<Cryptocurrency> cryptocurrencies, String cryptocurrencySymbol) {
+        return cryptocurrencies.stream()
+                .filter(cryptocurrency -> cryptocurrencySymbol.equals(cryptocurrency.getSymbol()))
+                .min(Comparator.comparingDouble(Cryptocurrency::getPrice))
+                .orElseThrow(() -> new NoSuchElementException("requested crypto not found!"));
+    }
+
+    @Override
+    public Cryptocurrency findMaxRequested(List<Cryptocurrency> cryptocurrencies, String cryptocurrencySymbol) {
+        return cryptocurrencies.stream()
+                .filter(cryptocurrency -> cryptocurrencySymbol.equals(cryptocurrency.getSymbol()))
+                .max(Comparator.comparingDouble(Cryptocurrency::getPrice))
+                .orElseThrow(() -> new NoSuchElementException("requested crypto not found!"));
+    }
+
     private Cryptocurrency getCryptocurrencyNormalizedRange(String cryptocurrencyName, List<Cryptocurrency> cryptocurrencies) {
 
         Cryptocurrency cryptocurrencyMinPrice = cryptocurrencies.stream()

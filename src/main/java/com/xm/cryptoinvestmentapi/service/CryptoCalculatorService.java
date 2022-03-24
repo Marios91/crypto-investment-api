@@ -16,4 +16,12 @@ public interface CryptoCalculatorService {
 
     List<Cryptocurrency> cryptocurrenciesNormalizedRange(List<Cryptocurrency> cryptocurrencies);
 
+    Cryptocurrency findOldestRequested(List<Cryptocurrency> cryptocurrencies, String cryptocurrencySymbol);
+
+    Cryptocurrency findNewestRequested(List<Cryptocurrency> cryptocurrencies, String cryptocurrencySymbol);
+
+    Cryptocurrency findMinRequested(List<Cryptocurrency> cryptocurrencies, String cryptocurrencySymbol);
+
+    Cryptocurrency findMaxRequested(List<Cryptocurrency> cryptocurrencies, String cryptocurrencySymbol);
+
 }

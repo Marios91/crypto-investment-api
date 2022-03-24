@@ -53,9 +53,33 @@ public class RecommendationController {
     }
 
     @GetMapping("/normalized-range")
-    private List<Cryptocurrency> getBtcCryptos() {
+    private List<Cryptocurrency> getNormalizedRangeCrypto() {
         List<Cryptocurrency> cryptocurrencies = csvFileRecordsReaderService.getRecords();
         return cryptoCalculatorService.cryptocurrenciesNormalizedRange(cryptocurrencies);
+    }
+
+    @GetMapping("/oldest-requested")
+    private Cryptocurrency getRequestedOldestCrypto(@RequestParam final String cryptocurrencySymbol) {
+        List<Cryptocurrency> cryptocurrencies = csvFileRecordsReaderService.getRecords();
+        return cryptoCalculatorService.findOldestRequested(cryptocurrencies, cryptocurrencySymbol);
+    }
+
+    @GetMapping("/newest-requested")
+    private Cryptocurrency getRequestedNewestCrypto(@RequestParam final String cryptocurrencySymbol) {
+        List<Cryptocurrency> cryptocurrencies = csvFileRecordsReaderService.getRecords();
+        return cryptoCalculatorService.findNewestRequested(cryptocurrencies, cryptocurrencySymbol);
+    }
+
+    @GetMapping("/min-requested")
+    private Cryptocurrency getRequestedMinCrypto(@RequestParam(value = "symbol") final String cryptocurrencySymbol) {
+        List<Cryptocurrency> cryptocurrencies = csvFileRecordsReaderService.getRecords();
+        return cryptoCalculatorService.findMinRequested(cryptocurrencies, cryptocurrencySymbol);
+    }
+
+    @GetMapping("/max-requested")
+    private Cryptocurrency getRequestedMaxCrypto(@RequestParam(value = "symbol") final String cryptocurrencySymbol) {
+        List<Cryptocurrency> cryptocurrencies = csvFileRecordsReaderService.getRecords();
+        return cryptoCalculatorService.findMaxRequested(cryptocurrencies, cryptocurrencySymbol);
     }
 
 }
