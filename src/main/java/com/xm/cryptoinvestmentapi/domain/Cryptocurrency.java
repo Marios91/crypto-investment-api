@@ -4,14 +4,22 @@ import java.time.LocalDateTime;
 
 public class Cryptocurrency {
 
-    private final LocalDateTime localDateTime;
-    private final String symbol;
-    private final double price;
+    private LocalDateTime localDateTime;
+    private String symbol;
+    private double price;
 
-    public Cryptocurrency(LocalDateTime localDateTime, String symbol, Double price) {
+    public Cryptocurrency(LocalDateTime localDateTime, String symbol, double price) {
         this.localDateTime = localDateTime;
         this.symbol = symbol;
         this.price = price;
+    }
+
+    public Cryptocurrency(String symbol, double price) {
+        this.symbol = symbol;
+        this.price = price;
+    }
+
+    public Cryptocurrency() {
     }
 
     public LocalDateTime getLocalDateTime() {

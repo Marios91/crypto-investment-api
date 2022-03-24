@@ -14,4 +14,6 @@ public interface CryptoCalculatorService {
 
     Cryptocurrency findMaxPrice(List<Cryptocurrency> cryptocurrencies);
 
+    List<Cryptocurrency> cryptocurrenciesNormalizedRange(List<Cryptocurrency> cryptocurrencies);
+
 }

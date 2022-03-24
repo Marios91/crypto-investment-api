@@ -1,13 +1,16 @@
 package com.xm.cryptoinvestmentapi.implementation;
 
 import com.xm.cryptoinvestmentapi.domain.Cryptocurrency;
+import com.xm.cryptoinvestmentapi.enumeration.CryptocurrencyType;
 import com.xm.cryptoinvestmentapi.service.CryptoCalculatorService;
 import com.xm.cryptoinvestmentapi.service.CsvFileRecordsReaderService;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Service
 public class CryptoCalculatorServiceImpl implements CryptoCalculatorService {
@@ -44,6 +47,36 @@ public class CryptoCalculatorServiceImpl implements CryptoCalculatorService {
         return cryptocurrencies.stream()
                 .max(Comparator.comparingDouble(Cryptocurrency::getPrice))
                 .orElseThrow(() -> new NoSuchElementException("no crypto found!"));
+    }
+
+    public List<Cryptocurrency> cryptocurrenciesNormalizedRange(List<Cryptocurrency> cryptocurrencies) {
+
+        List<Cryptocurrency> cryptocurrenciesNormalizedRange = Arrays.stream(Arrays.stream(CryptocurrencyType.class.getEnumConstants())
+                .map(Enum::name).toArray(String[]::new))
+                .map(cryptocurrencyName -> getCryptocurrencyNormalizedRange(cryptocurrencyName, cryptocurrencies))
+                .sorted(Comparator.comparingDouble(Cryptocurrency::getPrice).reversed())
+                .collect(Collectors.toList());
+
+        return cryptocurrenciesNormalizedRange;
+
+    }
+
+    private Cryptocurrency getCryptocurrencyNormalizedRange(String cryptocurrencyName, List<Cryptocurrency> cryptocurrencies) {
+
+        Cryptocurrency cryptocurrencyMinPrice = cryptocurrencies.stream()
+                .filter(cryptocurrency -> cryptocurrencyName.equals(cryptocurrency.getSymbol()))
+                .min(Comparator.comparingDouble(Cryptocurrency::getPrice))
+                .orElseThrow(() -> new NoSuchElementException("no crypto found!"));
+
+        Cryptocurrency cryptocurrencyMaxPrice = cryptocurrencies.stream()
+                .filter(cryptocurrency -> cryptocurrencyName.equals(cryptocurrency.getSymbol()))
+                .max(Comparator.comparingDouble(Cryptocurrency::getPrice))
+                .orElseThrow(() -> new NoSuchElementException("no crypto found!"));
+
+        double normalizedRange = (cryptocurrencyMaxPrice.getPrice() - cryptocurrencyMinPrice.getPrice() ) / cryptocurrencyMinPrice.getPrice();
+
+        return new Cryptocurrency(cryptocurrencyName, normalizedRange);
+
     }
 
 }

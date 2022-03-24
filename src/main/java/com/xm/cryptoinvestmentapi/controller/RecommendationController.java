@@ -5,6 +5,7 @@ import com.xm.cryptoinvestmentapi.service.CryptoCalculatorService;
 import com.xm.cryptoinvestmentapi.service.CsvFileRecordsReaderService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -49,6 +50,12 @@ public class RecommendationController {
     private Cryptocurrency getMaxCrypto() {
         List<Cryptocurrency> cryptocurrencies = csvFileRecordsReaderService.getRecords();
         return cryptoCalculatorService.findMaxPrice(cryptocurrencies);
+    }
+
+    @GetMapping("/normalized-range")
+    private List<Cryptocurrency> getBtcCryptos() {
+        List<Cryptocurrency> cryptocurrencies = csvFileRecordsReaderService.getRecords();
+        return cryptoCalculatorService.cryptocurrenciesNormalizedRange(cryptocurrencies);
     }
 
 }
