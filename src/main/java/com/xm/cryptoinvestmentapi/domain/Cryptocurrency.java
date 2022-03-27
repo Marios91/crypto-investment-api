@@ -1,6 +1,7 @@
 package com.xm.cryptoinvestmentapi.domain;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class Cryptocurrency {
 
@@ -13,10 +14,6 @@ public class Cryptocurrency {
         this.localDateTime = localDateTime;
         this.symbol = symbol;
         this.price = price;
-    }
-
-    public Cryptocurrency(double normalizedRange) {
-        this.normalizedRange = normalizedRange;
     }
 
     public Cryptocurrency(String symbol, double normalizedRange) {
@@ -48,5 +45,21 @@ public class Cryptocurrency {
                 ", price=" + price +
                 ", normalizedRange=" + normalizedRange +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Cryptocurrency that = (Cryptocurrency) o;
+        return Double.compare(that.price, price) == 0
+                && Double.compare(that.normalizedRange, normalizedRange) == 0
+                && Objects.equals(localDateTime, that.localDateTime)
+                && Objects.equals(symbol, that.symbol);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(localDateTime, symbol, price, normalizedRange);
     }
 }

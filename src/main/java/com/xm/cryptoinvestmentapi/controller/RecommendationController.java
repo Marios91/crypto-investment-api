@@ -74,13 +74,13 @@ public class RecommendationController {
     }
 
     @GetMapping("/min-requested")
-    private Cryptocurrency getRequestedMinCrypto(@RequestParam(value = "symbol") final String cryptocurrencySymbol) {
+    private Cryptocurrency getRequestedMinCrypto(@RequestParam final String cryptocurrencySymbol) {
         List<Cryptocurrency> cryptocurrencies = csvFileRecordsReaderService.getRecords();
         return cryptoCalculatorService.findMinRequested(cryptocurrencies, cryptocurrencySymbol);
     }
 
     @GetMapping("/max-requested")
-    private Cryptocurrency getRequestedMaxCrypto(@RequestParam(value = "symbol") final String cryptocurrencySymbol) {
+    private Cryptocurrency getRequestedMaxCrypto(@RequestParam final String cryptocurrencySymbol) {
         List<Cryptocurrency> cryptocurrencies = csvFileRecordsReaderService.getRecords();
         return cryptoCalculatorService.findMaxRequested(cryptocurrencies, cryptocurrencySymbol);
     }
