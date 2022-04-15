@@ -30,9 +30,9 @@ class CryptoCalculatorServiceImplTest {
         Cryptocurrency cryptocurrencyB = new Cryptocurrency(LocalDateTime.of(2022, Month.JUNE, 12, 16, 30, 45), "EFG", 67891.0);
         Cryptocurrency cryptocurrencyC = new Cryptocurrency(LocalDateTime.of(2022, Month.APRIL, 5, 14, 20, 28), "HFL", 89132.0);
 
-        when(csvFileRecordsReaderServiceMock.getRecords()).thenReturn(Arrays.asList(cryptocurrencyA, cryptocurrencyB, cryptocurrencyC));
+        when(csvFileRecordsReaderServiceMock.getFileRecords()).thenReturn(Arrays.asList(cryptocurrencyA, cryptocurrencyB, cryptocurrencyC));
 
-        assertEquals(cryptocurrencyC, cryptoCalculatorService.findOldest(csvFileRecordsReaderServiceMock.getRecords()));
+        assertEquals(cryptocurrencyC, cryptoCalculatorService.findOldest(csvFileRecordsReaderServiceMock.getFileRecords()));
 
     }
 
@@ -42,9 +42,9 @@ class CryptoCalculatorServiceImplTest {
         Cryptocurrency cryptocurrencyB = new Cryptocurrency(LocalDateTime.of(2022, Month.JUNE, 12, 16, 30, 45), "EFG", 67891.0);
         Cryptocurrency cryptocurrencyC = new Cryptocurrency(LocalDateTime.of(2022, Month.APRIL, 5, 14, 20, 28), "HFL", 89132.0);
 
-        when(csvFileRecordsReaderServiceMock.getRecords()).thenReturn(Arrays.asList(cryptocurrencyA, cryptocurrencyB, cryptocurrencyC));
+        when(csvFileRecordsReaderServiceMock.getFileRecords()).thenReturn(Arrays.asList(cryptocurrencyA, cryptocurrencyB, cryptocurrencyC));
 
-        assertEquals(cryptocurrencyA, cryptoCalculatorService.findNewest(csvFileRecordsReaderServiceMock.getRecords()));
+        assertEquals(cryptocurrencyA, cryptoCalculatorService.findNewest(csvFileRecordsReaderServiceMock.getFileRecords()));
     }
 
     @Test
@@ -53,9 +53,9 @@ class CryptoCalculatorServiceImplTest {
         Cryptocurrency cryptocurrencyB = new Cryptocurrency(LocalDateTime.of(2022, Month.JUNE, 12, 16, 30, 45), "EFG", 67891.0);
         Cryptocurrency cryptocurrencyC = new Cryptocurrency(LocalDateTime.of(2022, Month.APRIL, 5, 14, 20, 28), "HFL", 89132.0);
 
-        when(csvFileRecordsReaderServiceMock.getRecords()).thenReturn(Arrays.asList(cryptocurrencyA, cryptocurrencyB, cryptocurrencyC));
+        when(csvFileRecordsReaderServiceMock.getFileRecords()).thenReturn(Arrays.asList(cryptocurrencyA, cryptocurrencyB, cryptocurrencyC));
 
-        assertEquals(cryptocurrencyA, cryptoCalculatorService.findMinPrice(csvFileRecordsReaderServiceMock.getRecords()));
+        assertEquals(cryptocurrencyA, cryptoCalculatorService.findMinPrice(csvFileRecordsReaderServiceMock.getFileRecords()));
     }
 
     @Test
@@ -64,9 +64,9 @@ class CryptoCalculatorServiceImplTest {
         Cryptocurrency cryptocurrencyB = new Cryptocurrency(LocalDateTime.of(2022, Month.JUNE, 12, 16, 30, 45), "EFG", 67891.0);
         Cryptocurrency cryptocurrencyC = new Cryptocurrency(LocalDateTime.of(2022, Month.APRIL, 5, 14, 20, 28), "HFL", 89132.0);
 
-        when(csvFileRecordsReaderServiceMock.getRecords()).thenReturn(Arrays.asList(cryptocurrencyA, cryptocurrencyB, cryptocurrencyC));
+        when(csvFileRecordsReaderServiceMock.getFileRecords()).thenReturn(Arrays.asList(cryptocurrencyA, cryptocurrencyB, cryptocurrencyC));
 
-        assertEquals(cryptocurrencyC, cryptoCalculatorService.findMaxPrice(csvFileRecordsReaderServiceMock.getRecords()));
+        assertEquals(cryptocurrencyC, cryptoCalculatorService.findMaxPrice(csvFileRecordsReaderServiceMock.getFileRecords()));
     }
 
     @Test
@@ -83,7 +83,7 @@ class CryptoCalculatorServiceImplTest {
         Cryptocurrency cryptocurrencyC2 = new Cryptocurrency(LocalDateTime.of(2022, Month.MAY, 15, 11, 50, 25), "LTC", 1356.0);
         Cryptocurrency cryptocurrencyC3 = new Cryptocurrency(LocalDateTime.of(2022, Month.OCTOBER, 18, 13, 33, 14), "LTC", 2468.0);
 
-        when(csvFileRecordsReaderServiceMock.getRecords()).thenReturn(Arrays.asList(cryptocurrencyA1, cryptocurrencyA2, cryptocurrencyA3,
+        when(csvFileRecordsReaderServiceMock.getFileRecords()).thenReturn(Arrays.asList(cryptocurrencyA1, cryptocurrencyA2, cryptocurrencyA3,
                 cryptocurrencyB1, cryptocurrencyB2,cryptocurrencyB3, cryptocurrencyC1, cryptocurrencyC2, cryptocurrencyC3));
 
         double cryptoANormalizedRange = (cryptocurrencyA2.getPrice() - cryptocurrencyA3.getPrice()) / cryptocurrencyA3.getPrice();
@@ -94,7 +94,7 @@ class CryptoCalculatorServiceImplTest {
         Cryptocurrency cryptocurrencyB = new Cryptocurrency(cryptocurrencyB1.getSymbol(), cryptoBNormalizedRange);
         Cryptocurrency cryptocurrencyC = new Cryptocurrency(cryptocurrencyC1.getSymbol(), cryptoCNormalizedRange);
 
-        assertEquals(Arrays.asList(cryptocurrencyA, cryptocurrencyB, cryptocurrencyC), cryptoCalculatorService.cryptocurrenciesNormalizedRange(csvFileRecordsReaderServiceMock.getRecords()));
+        assertEquals(Arrays.asList(cryptocurrencyA, cryptocurrencyB, cryptocurrencyC), cryptoCalculatorService.cryptocurrenciesNormalizedRange(csvFileRecordsReaderServiceMock.getFileRecords()));
 
     }
 
@@ -104,9 +104,9 @@ class CryptoCalculatorServiceImplTest {
         Cryptocurrency cryptocurrencyA2 = new Cryptocurrency(LocalDateTime.of(2022, Month.JUNE, 12, 16, 30, 45), "ABC", 67891.0);
         Cryptocurrency cryptocurrencyA3 = new Cryptocurrency(LocalDateTime.of(2022, Month.APRIL, 5, 14, 20, 28), "ABC", 89132.0);
 
-        when(csvFileRecordsReaderServiceMock.getRecords()).thenReturn(Arrays.asList(cryptocurrencyA1, cryptocurrencyA2, cryptocurrencyA3));
+        when(csvFileRecordsReaderServiceMock.getFileRecords()).thenReturn(Arrays.asList(cryptocurrencyA1, cryptocurrencyA2, cryptocurrencyA3));
 
-        assertEquals(cryptocurrencyA3, cryptoCalculatorService.findOldestRequested(csvFileRecordsReaderServiceMock.getRecords(), cryptocurrencyA1.getSymbol()));
+        assertEquals(cryptocurrencyA3, cryptoCalculatorService.findOldestRequested(csvFileRecordsReaderServiceMock.getFileRecords(), cryptocurrencyA1.getSymbol()));
     }
 
     @Test
@@ -115,9 +115,9 @@ class CryptoCalculatorServiceImplTest {
         Cryptocurrency cryptocurrencyA2 = new Cryptocurrency(LocalDateTime.of(2022, Month.JUNE, 12, 16, 30, 45), "ABC", 67891.0);
         Cryptocurrency cryptocurrencyA3 = new Cryptocurrency(LocalDateTime.of(2022, Month.APRIL, 5, 14, 20, 28), "ABC", 89132.0);
 
-        when(csvFileRecordsReaderServiceMock.getRecords()).thenReturn(Arrays.asList(cryptocurrencyA1, cryptocurrencyA2, cryptocurrencyA3));
+        when(csvFileRecordsReaderServiceMock.getFileRecords()).thenReturn(Arrays.asList(cryptocurrencyA1, cryptocurrencyA2, cryptocurrencyA3));
 
-        assertEquals(cryptocurrencyA1, cryptoCalculatorService.findNewestRequested(csvFileRecordsReaderServiceMock.getRecords(), cryptocurrencyA1.getSymbol()));
+        assertEquals(cryptocurrencyA1, cryptoCalculatorService.findNewestRequested(csvFileRecordsReaderServiceMock.getFileRecords(), cryptocurrencyA1.getSymbol()));
     }
 
     @Test
@@ -126,9 +126,9 @@ class CryptoCalculatorServiceImplTest {
         Cryptocurrency cryptocurrencyA2 = new Cryptocurrency(LocalDateTime.of(2022, Month.JUNE, 12, 16, 30, 45), "ABC", 67891.0);
         Cryptocurrency cryptocurrencyA3 = new Cryptocurrency(LocalDateTime.of(2022, Month.APRIL, 5, 14, 20, 28), "ABC", 89132.0);
 
-        when(csvFileRecordsReaderServiceMock.getRecords()).thenReturn(Arrays.asList(cryptocurrencyA1, cryptocurrencyA2, cryptocurrencyA3));
+        when(csvFileRecordsReaderServiceMock.getFileRecords()).thenReturn(Arrays.asList(cryptocurrencyA1, cryptocurrencyA2, cryptocurrencyA3));
 
-        assertEquals(cryptocurrencyA1, cryptoCalculatorService.findMinRequested(csvFileRecordsReaderServiceMock.getRecords(), cryptocurrencyA1.getSymbol()));
+        assertEquals(cryptocurrencyA1, cryptoCalculatorService.findMinRequested(csvFileRecordsReaderServiceMock.getFileRecords(), cryptocurrencyA1.getSymbol()));
     }
 
     @Test
@@ -137,9 +137,9 @@ class CryptoCalculatorServiceImplTest {
         Cryptocurrency cryptocurrencyA2 = new Cryptocurrency(LocalDateTime.of(2022, Month.JUNE, 12, 16, 30, 45), "ABC", 67891.0);
         Cryptocurrency cryptocurrencyA3 = new Cryptocurrency(LocalDateTime.of(2022, Month.APRIL, 5, 14, 20, 28), "ABC", 89132.0);
 
-        when(csvFileRecordsReaderServiceMock.getRecords()).thenReturn(Arrays.asList(cryptocurrencyA1, cryptocurrencyA2, cryptocurrencyA3));
+        when(csvFileRecordsReaderServiceMock.getFileRecords()).thenReturn(Arrays.asList(cryptocurrencyA1, cryptocurrencyA2, cryptocurrencyA3));
 
-        assertEquals(cryptocurrencyA3, cryptoCalculatorService.findMaxRequested(csvFileRecordsReaderServiceMock.getRecords(), cryptocurrencyA1.getSymbol()));
+        assertEquals(cryptocurrencyA3, cryptoCalculatorService.findMaxRequested(csvFileRecordsReaderServiceMock.getFileRecords(), cryptocurrencyA1.getSymbol()));
     }
 
     @Test
@@ -157,12 +157,12 @@ class CryptoCalculatorServiceImplTest {
         Cryptocurrency cryptocurrencyC2 = new Cryptocurrency(LocalDateTime.of(2022, Month.APRIL, 18, 13, 33, 14), "HFL", 1356.0);
         Cryptocurrency cryptocurrencyC3 = new Cryptocurrency(LocalDateTime.of(2022, Month.APRIL, 18, 13, 33, 14), "HFL", 2468.0);
 
-        when(csvFileRecordsReaderServiceMock.getRecords()).thenReturn(Arrays.asList(cryptocurrencyA1, cryptocurrencyA2, cryptocurrencyA3,
+        when(csvFileRecordsReaderServiceMock.getFileRecords()).thenReturn(Arrays.asList(cryptocurrencyA1, cryptocurrencyA2, cryptocurrencyA3,
                 cryptocurrencyB1, cryptocurrencyB2,cryptocurrencyB3, cryptocurrencyC1, cryptocurrencyC2, cryptocurrencyC3));
 
         double cryptoANormalizedRange = (cryptocurrencyA2.getPrice() - cryptocurrencyA3.getPrice()) / cryptocurrencyA3.getPrice();
         Cryptocurrency cryptocurrencyA4 = new Cryptocurrency("ABC", cryptoANormalizedRange);
 
-        assertEquals(cryptocurrencyA4, cryptoCalculatorService.findMaxNormalizedRangeDayRequested(csvFileRecordsReaderServiceMock.getRecords(), cryptocurrencyA1.getLocalDateTime().toLocalDate()));
+        assertEquals(cryptocurrencyA4, cryptoCalculatorService.findMaxNormalizedRangeDayRequested(csvFileRecordsReaderServiceMock.getFileRecords(), cryptocurrencyA1.getLocalDateTime().toLocalDate()));
     }
 }

@@ -33,7 +33,7 @@ class RecommendationControllerTest {
         LocalDateTime currentTime = LocalDateTime.now();
         Cryptocurrency cryptocurrencyA = new Cryptocurrency(currentTime, "ABC", 12345.0);
         Cryptocurrency cryptocurrencyB = new Cryptocurrency(currentTime, "EFG", 67891.0);
-        when(csvFileRecordsReaderServiceMock.getRecords()).thenReturn(Arrays.asList(cryptocurrencyA, cryptocurrencyB));
+        when(csvFileRecordsReaderServiceMock.getFileRecords()).thenReturn(Arrays.asList(cryptocurrencyA, cryptocurrencyB));
 
         this.mockMvc.perform(get("/cryptos/data"))
                 .andExpect(status().isOk())
@@ -46,7 +46,7 @@ class RecommendationControllerTest {
                 .andExpect(jsonPath("$[1].symbol").value("EFG"))
                 .andExpect(jsonPath("$[1].price").value(67891.0));
 
-        verify(csvFileRecordsReaderServiceMock, times(1)).getRecords();
+        verify(csvFileRecordsReaderServiceMock, times(1)).getFileRecords();
         verifyNoMoreInteractions(csvFileRecordsReaderServiceMock);
     }
 
